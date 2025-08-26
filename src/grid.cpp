@@ -5,7 +5,9 @@ std::vector<Grid::Move> Grid::get_moves() const noexcept {
     std::vector<Move> moves;
     moves.reserve(64);
     auto grid_copy = data_;
-    std::stack<Coord, std::vector<Coord>> discovered_neighbours;
+    std::vector<Coord> vec;
+    vec.reserve(16);
+    std::stack<Coord, std::vector<Coord>> discovered_neighbours(std::move(vec));
     
 
     for (uint8_t r = 0; r < height; ++r) {
@@ -96,7 +98,9 @@ int Grid::count_moves() const noexcept {
 
 Grid::Move Grid::expand_move(const Coord &coord) {
     Move move{};
-    std::stack<Coord> discovered_neighbours;
+    std::vector<Coord> vec;
+    vec.reserve(16);
+    std::stack<Coord, std::vector<Coord>> discovered_neighbours(std::move(vec));
     GridArray<bool> visited{};
     discovered_neighbours.push(coord);
     Cell cell = data_[coord.first][coord.second];

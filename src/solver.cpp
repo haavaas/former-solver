@@ -50,8 +50,8 @@ struct CompressedGridHasher
 
 uint8_t get_small_hash(size_t big_hash) {
     uint8_t small_hash = 0;
-    for (uint8_t i = 0; i < 8; ++i) {
-        small_hash ^= (big_hash >> (i * 8)) & 0xFF;
+    for (uint8_t byte_offset = 0; byte_offset < 64; byte_offset += 8) {
+        small_hash ^= (big_hash >> (byte_offset)) & 0xFF;
     }
     return small_hash;
 }
@@ -104,7 +104,8 @@ BeamSolution solve_beam(Grid start,
     BeamSolution result;
     result.boards_analyzed = 1;
 
-    std::multiset<Node> beam;
+    std::vector<Node> beam;
+    beam.reserve(beam_width);
     std::multiset<Node> next_beam;
     
     if (initial_moves.empty())
@@ -116,8 +117,7 @@ BeamSolution solve_beam(Grid start,
     {
         Grid g = start;
         g.play(move);
-        Node node{std::move(g), {move[0]}, 0};
-        beam.insert(std::move(node));
+        beam.push_back(Node{std::move(g), {move[0]}, 0});
     }
 
     for (int depth = 0; depth < static_cast<int>(max_depth); ++depth)
@@ -187,7 +187,10 @@ BeamSolution solve_beam(Grid start,
 
         if (next_beam.empty())
             break;
-        next_beam.swap(beam);
+
+        beam.clear();
+        beam.reserve(beam_width);
+        std::copy(next_beam.begin(), next_beam.end(), std::back_inserter(beam));
         next_beam.clear();
     }
 

@@ -1,3 +1,5 @@
 build
 .vscode
 .ninja_log
+former-solver
+former-solver.exe
