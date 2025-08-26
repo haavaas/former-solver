@@ -1,20 +1,10 @@
-# Define a rule for compiling C++ source files
-rule compile_cpp
-  command = g++ -std=c++17 -c $in -o $out -Wall -Wextra -O3
+# build.ninja
+# This file is the build configuration for Ninja.
 
-rule compile_opencv
-  command = g++ -std=c++17 -c $in -O3 `pkg-config --cflags --libs opencv4` -o $out
+rule cpp
+  command = g++ -std=c++20 -O3 -flto -o $out $in -lcurl -lcrypto
+  description = Compiling $in to $out
 
-# Define a rule for linking object files into an executable
-rule link_executable
-  command = g++ -std=c++17 $in -o $out `pkg-config --libs opencv4`
+build former_solver: cpp src/grid_fetcher.cpp src/grid.cpp src/solver.cpp src/cli.cpp src/main.cpp
 
-# Build object files in the build/ directory
-build build/main.o: compile_cpp former.cpp
-build build/board_annotate.o: compile_opencv board_annotate.cpp
-
-# Build the executable in the build/ directory
-build build/my_program: link_executable build/board_annotate.o build/main.o
-
-# Specify the default target
-default build/my_program
+default former_solver
