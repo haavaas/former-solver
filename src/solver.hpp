@@ -17,3 +17,4 @@ BeamSolution solve_beam_parallel(const Grid &start,
                                  std::size_t max_depth = Grid::width * Grid::height);
 
 size_t get_hash_map_size(void);
+void reserve_hash_map_size(void);
