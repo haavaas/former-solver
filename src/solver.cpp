@@ -83,6 +83,18 @@ size_t get_hash_map_size(void) {
     return total_size;
 }
 
+void reserve_hash_map_size(void) {
+    for (auto &mutex : known_boards_mutex) {
+        mutex.lock();
+    }
+    for (auto &bucket : known_boards) {
+        bucket.reserve(256*1024);
+    }
+    for (auto &mutex : known_boards_mutex) {
+        mutex.unlock();
+    }
+}
+
 
 BeamSolution solve_beam(Grid start,
                         std::vector<Grid::Move> initial_moves,

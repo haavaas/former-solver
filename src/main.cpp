@@ -51,6 +51,7 @@ int main(int argc, char **argv)
     const std::size_t max_depth = Grid::width * Grid::height;
     
     
+    reserve_hash_map_size();
     auto t0 = std::chrono::steady_clock::now();
     BeamSolution beam_solution = solve_beam_parallel(grid, cfg.search_width, cfg.threads, max_depth);
 
