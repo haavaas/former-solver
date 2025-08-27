@@ -245,10 +245,10 @@ Grid fetch_grid(void) {
     }
 
     auto date = date_minus_31_days();
-    auto seed = crypto::md5_hex("2572025");
+    auto seed = crypto::md5_hex("2772025");
     
-    //std::cout << "Date 31 days ago: " << date << "\n";
-    //std::cout << "Today's seed: " << *s << "\n";
-    //std::cout << "    Our seed: " << crypto::md5_hex("18072025") << "\n";
-    return generateBoard(seed);
+    std::cout << "Date 31 days ago: " << date << "\n";
+    std::cout << "Today's seed: " << *s << "\n";
+    std::cout << "    Our seed: " << seed << "\n";
+    return generateBoard(*s);
 }

@@ -68,7 +68,7 @@ struct Node
     }
 };
 
-int cost (Grid g) {
+int cost (const Grid &g) {
     return g.count_moves();
 }
 
@@ -119,7 +119,7 @@ BeamSolution solve_beam(Grid start,
                 ++result.boards_analyzed;
 
                 int h = cost(child);
-                if (child.count_moves() < 3)
+                if (h < 3)
                 {
                     result.solved = true;
                     result.moves = node.path;
@@ -141,7 +141,7 @@ BeamSolution solve_beam(Grid start,
                 mutex.lock();
                 auto hit = bucket.find(cg);
                 if (hit == bucket.end() || hit->second > depth) {
-                    bucket[cg] = depth;
+                    bucket.insert_or_assign(std::move(cg), depth);
                     drop = false;
                 }
                 mutex.unlock();
